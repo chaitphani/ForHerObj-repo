@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="{%static 'css/style.css'%}">
+    <style>
+        /* login window */
+        #login_window label {
+            font-size: 14px;
+            font-weight: 600;
+            padding-bottom: 0px;
+        }
+
+        #login_window ::placeholder {
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        #login_window .container-fluid {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #login_window {
+            /* margin: 5% auto; */
+            min-width: 280px;
+            max-width:600px;
+            height: 450px;
+            padding: 50px;
+            background: #fff;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+        }
+
+        #login_window hr {
+            border-color: orange;
+        }
+
+        #login_window p {
+            color: #aaa
+        }
+
+
+        /* register window */
+        #register_window {
+            display: none;
+            /* margin: 2% auto; */
+            min-width: 280px;
+            max-width:600px;
+            /* height: 650px; */
+            padding: 50px;
+            background: #fff;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+        }
+
+        #register_window p {
+            color: #aaa
+        }
+
+        #register_window hr {
+            border-color: orange;
+        }
+
+        #register_window label {
+            font-size: 14px;
+            font-weight: 600;
+            padding-bottom: 0px;
+        }
+
+        #register_window ::placeholder {
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        #register_window .container-fluid {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }     
+        body{
+            background: url('https://img3.goodfon.com/wallpaper/nbig/9/61/priroda-zima-skamya-park.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        } 
+        .w2-50{
+            width:54%!important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- registration form -->
+    <div class="container mt-3 rounded">
+        <h3 class="text-capitalize text-white">welcome to weather app</h3>
+        <p class="text-capitalize text-white">Provide your account details</p>
+        <hr>
+        {% if messages %}
+        <div class="w2-50">
+            <ul class="messages list-unstyled" id="msg_display">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }} font-weight-bold p-3 rounded" {% endif %}>
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                        <button type="button" class="close mr-3 mb-2 text-danger font-weight-bold" onclick="dismissFunction()">&times;</button>
+                        <span class="ml-3">{{ message }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- signup part here -->
+        <div id="register_window" class="rounded">
+            <form method="POST" action="{% url 'signup' %}" class="mb-4" id="register_window_id">
+                {% csrf_token %}
+                <label for="id_name">First Name:*</label>
+                <input type="text" name="first_name" class="form-control" maxlength="120" required id="id_name">
+                <label for="id_name" class="mt-2">Last Name:*</label>
+                <input type="text" name="last_name" class="form-control" maxlength="120" required id="id_name">                                
+                <label for="id_name" class="mt-2">User Name:*</label>
+                <input type="text" name="username" class="form-control" maxlength="120" required id="id_name">
+                <label for="id_email" class="mt-2">Email:*</label>
+                <input type="email" name="email" class="form-control" maxlength="100" required id="id_email">
+                <label for="id_password" class="mt-2">Password:*</label>
+                <input type="password" name="password" class="form-control" maxlength="100" required id="id_password">
+                <input type="submit" class="btn btn-primary w-100 mt-3" value="SIGN UP">
+            </form>
+            <p class="text-left mt-4 mb-2">Already have an account ?
+                <a id="signin_btn" href="#" class="btn btn-outline-primary btn-sm ml-1"> Log In</a>
+            </p>
+        </div>
+
+        <!-- login part here -->
+        <div class="rounded" id="login_window">
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <label for="id_email">Email:*</label>
+                <input type="email" name="email_temp" class="form-control" maxlength="100" required id="id_email">
+                <label for="id_password" class="mt-3">Password:*</label>
+                <input type="password" name="pass_temp" class="form-control" maxlength="100" required id="id_password">
+                <br>
+                <input type="submit" class="btn btn-primary w-100" value="LOGIN">
+            </form>
+            <p class="text-left mt-4">Don't have an account ?
+                <a id="signup_btn" href="#" class="btn btn-outline-primary btn-sm ml-1">Sign up</a>
+            </p>
+            
+        </div>
+    </div>
+
+    <script>
+        $("#signup_btn").click(function () {
+            $("#login_window").hide();
+            $("#register_window").show();
+        });
+
+        $("#signin_btn").click(function () {
+            $("#login_window").show();
+            $("#register_window").hide();
+        });
+    </script>  
+
+    <script>
+        function dismissFunction() {
+        document.getElementById("msg_display").style.display = "none";
+        }
+    </script>    
+</body>
+
+</html>
