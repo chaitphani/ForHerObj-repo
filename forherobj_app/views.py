@@ -14,7 +14,6 @@ from .models import WeatherDetails
 @login_required(login_url='/login')
 def home(request):
 
-    print('------requetd user-----', request.user)
     data = {}
     if request.method == 'POST':
         get_city = request.POST.get('city')
@@ -78,26 +77,17 @@ def login_fun(request):
         email_input = request.POST.get('email_temp')
         pwd = request.POST.get('pass_temp')
 
-        print('-----email input-------',email_input)
-        print('-----pwd input-------',pwd)
         if User.objects.filter(email=email_input).exists():
             user_obj = User.objects.get(email=email_input)
             
             user = authenticate(username=user_obj.username, password=pwd)
             login(request, user)
-            print('-------user obj in login------', user)
             if user:
-                print('-----inside if user obj and pwd match------')
-            #     request.session['email'] = user_obj.email
-            #     print('-------request session in login----', request.session['email'])
                 messages.success(request, 'You are successfully logged-in.')
-                print('------final print of user------', user_obj.username, user_obj.email)
                 return redirect('/')
             else:
-                print('------pwd mismatch------')
                 messages.error(request, 'Password mismatch..!')
         else:
-            print('------wrong email----------')
             messages.error(request, 'Please check email..!')
     return render(request, 'forherobj_app/login.html')
 
