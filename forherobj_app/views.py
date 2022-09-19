@@ -53,6 +53,7 @@ def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
+        print('-----email-----', email)
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'provided user name already taken..')
