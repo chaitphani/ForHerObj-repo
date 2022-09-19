@@ -17,7 +17,6 @@ def home(request):
     data = {}
     if request.method == 'POST':
         get_city = request.POST.get('city')
-        print('----get city name-----', get_city)
 
         key = '271d1234d3f497eed5b1d80a07b3fcd1'
         url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid={}'.format(get_city, key)
@@ -53,7 +52,6 @@ def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
-        print('-----email-----', email)
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'provided user name already taken..')
